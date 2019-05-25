@@ -1,10 +1,7 @@
 """OMDB data loader"""
 
-import logging
 import requests
 
-
-logger = logging.getLogger("omdb-fl")
 
 base_url = "http://www.omdbapi.com/"
 
