@@ -2,7 +2,6 @@
 
 import requests
 
-
 base_url = "http://www.omdbapi.com/"
 
 
