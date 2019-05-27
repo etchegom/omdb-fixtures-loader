@@ -37,21 +37,3 @@ def search_and_fetch(api_key: str, search: str, media_type: str = "movie"):
             base_url, params={"apikey": api_key, "i": hit.get("imdbID")}
         )
         yield resp.json()
-
-
-if __name__ == "__main__":
-    import argparse
-    from pprint import pprint
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--apikey", dest="api_key", help="OMDB API key")
-    parser.add_argument("--search", dest="search", help="The text to search")
-    parser.add_argument(
-        "--type", dest="media_type", help="Type of media (movie, series or episode)"
-    )
-    args = parser.parse_args()
-
-    for hit in search_and_fetch(
-        api_key=args.api_key, search=args.search, media_type=args.media_type
-    ):
-        pprint(hit)
