@@ -9,11 +9,11 @@ jobs:
       - checkout
 
       - run:
-        name: Install tox
-        command: |
-          python3 -m venv venv	
-          source venv/bin/activate
-          pip install tox
+          name: Install tox
+          command: |
+            python3 -m venv venv	
+            source venv/bin/activate
+            pip install tox
 
       - run:
           name: Run linters
@@ -22,6 +22,6 @@ jobs:
             tox -e flake8,mypy
 
 workflows:
-  Check:
+  check-code:
     jobs:
       - check
