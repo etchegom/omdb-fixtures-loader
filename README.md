@@ -6,8 +6,9 @@ Fetch data from [The Open Movie Database](http://www.omdbapi.com/) API, in order
 http://www.omdbapi.com/apikey.aspx
 
 2. Use loader to fetch data
+
 Ex:
-```
+```python
 from omdb_fixtures_loader import loader
 
 for hit in loader.search_and_fetch(api_key="xxxxxxx", search="avengers"):
