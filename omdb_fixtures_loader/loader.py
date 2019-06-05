@@ -9,6 +9,13 @@ class LoaderException(Exception):
     pass
 
 
+def _format_hit(hit: dict) -> dict:
+    ret_hit = dict((k.lower(), v) for k, v in hit.items())
+    for field in ("actors", "genre",):
+        ret_hit[field] = [x.trim() for x in ret_hit[field].split(",")]
+    return ret_hit
+
+
 def search_and_fetch(api_key: str, search: str, media_type: str = "movie"):
     """Perform a search against the OMDB database and yield the returned hits
 
@@ -36,4 +43,4 @@ def search_and_fetch(api_key: str, search: str, media_type: str = "movie"):
         resp = requests.get(
             base_url, params={"apikey": api_key, "i": hit.get("imdbID")}
         )
-        yield resp.json()
+        yield _format_hit(resp.json())
