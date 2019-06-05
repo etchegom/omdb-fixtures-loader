@@ -12,7 +12,7 @@ class LoaderException(Exception):
 def _format_hit(hit: dict) -> dict:
     ret_hit = dict((k.lower(), v) for k, v in hit.items())
     for field in ("actors", "genre",):
-        ret_hit[field] = [x.trim() for x in ret_hit[field].split(",")]
+        ret_hit[field] = [x.strip() for x in ret_hit[field].split(",")]
     return ret_hit
 
 
