@@ -7,7 +7,7 @@ import requests
 base_url = "http://www.omdbapi.com/"
 
 
-class LoaderException(Exception):
+class LoaderError(Exception):
     pass
 
 
@@ -29,7 +29,9 @@ def _format_hit(hit: dict, options: dict = {}) -> dict:
             continue
         try:
             date_value = datetime.strptime(ret_hit[field], "%d %b %Y")
-            ret_hit[field] = date_value.strftime(options.get(DATE_FMT_OPTION, "%Y-%m-%d"))
+            ret_hit[field] = date_value.strftime(
+                options.get(DATE_FMT_OPTION, "%Y-%m-%d")
+            )
         except ValueError:
             pass
 
@@ -57,13 +59,11 @@ def search_and_fetch(api_key: str, search: str, media_type: str = "movie", **opt
         base_url, params={"apikey": api_key, "type": media_type, "s": search}
     )
     if resp.status_code != 200:
-        raise LoaderException(
-            "URL {} returned code{}".format(resp.url, resp.status_code)
-        )
+        raise LoaderError("URL {} returned code{}".format(resp.url, resp.status_code))
 
     json_resp = resp.json()
     if "Search" not in json_resp:
-        raise LoaderException(resp.text)
+        raise LoaderError(resp.text)
 
     for hit in json_resp.get("Search"):
         resp = requests.get(
@@ -72,7 +72,13 @@ def search_and_fetch(api_key: str, search: str, media_type: str = "movie", **opt
         yield _format_hit(resp.json(), options)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from pprint import pprint
-    hits = search_and_fetch(api_key="eb88cc", search="back to the future", date_fmt="%Y-%m", source=["title", "released"])
+
+    hits = search_and_fetch(
+        api_key="eb88cc",
+        search="back to the future",
+        date_fmt="%Y-%m",
+        source=["title", "released"],
+    )
     pprint(list(hits))

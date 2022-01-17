@@ -1,3 +1,20 @@
+[tool.poetry]
+name = "omdb-fixtures-loader"
+version = "0.1.0"
+description = "Load data from the Open Movie Database and build fixture"
+authors = ["Etchegoyen Matthieu <etchegom@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^4.0.1"
+flake8-colors = "^0.1.9"
+autoflake = "^1.4"
+black = "^21.12b0"
+isort = "^5.10.1"
+
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0", "setuptools", "wheel"]
+build-backend = "poetry.core.masonry.api"
+# build-backend = "setuptools.build_meta"
