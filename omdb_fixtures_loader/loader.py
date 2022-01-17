@@ -71,14 +71,3 @@ def search_and_fetch(api_key: str, search: str, media_type: str = "movie", **opt
         )
         yield _format_hit(resp.json(), options)
 
-
-if __name__ == "__main__":
-    from pprint import pprint
-
-    hits = search_and_fetch(
-        api_key="eb88cc",
-        search="back to the future",
-        date_fmt="%Y-%m",
-        source=["title", "released"],
-    )
-    pprint(list(hits))
