@@ -29,9 +29,7 @@ def _format_hit(hit: dict, options: dict = {}) -> dict:
             continue
         try:
             date_value = datetime.strptime(ret_hit[field], "%d %b %Y")
-            ret_hit[field] = date_value.strftime(
-                options.get(DATE_FMT_OPTION, "%Y-%m-%d")
-            )
+            ret_hit[field] = date_value.strftime(options.get(DATE_FMT_OPTION, "%Y-%m-%d"))
         except ValueError:
             pass
 
@@ -55,9 +53,7 @@ def search_and_fetch(api_key: str, search: str, media_type: str = "movie", **opt
             (https://docs.python.org/fr/3.6/library/datetime.html?highlight=strftime#strftime-and-strptime-behavior)
     """
 
-    resp = requests.get(
-        base_url, params={"apikey": api_key, "type": media_type, "s": search}
-    )
+    resp = requests.get(base_url, params={"apikey": api_key, "type": media_type, "s": search})
     if resp.status_code != 200:
         raise LoaderError("URL {} returned code{}".format(resp.url, resp.status_code))
 
@@ -66,8 +62,5 @@ def search_and_fetch(api_key: str, search: str, media_type: str = "movie", **opt
         raise LoaderError(resp.text)
 
     for hit in json_resp.get("Search"):
-        resp = requests.get(
-            base_url, params={"apikey": api_key, "i": hit.get("imdbID")}
-        )
+        resp = requests.get(base_url, params={"apikey": api_key, "i": hit.get("imdbID")})
         yield _format_hit(resp.json(), options)
-
