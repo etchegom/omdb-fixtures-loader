@@ -18,3 +18,9 @@ isort = "^5.10.1"
 requires = ["poetry-core>=1.0.0", "setuptools", "wheel"]
 build-backend = "poetry.core.masonry.api"
 # build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 100
+include = '\.pyi?$'
+extend-exclude = '.venv|migrations|node_modules|assets|dist|templates'
+skip-magic-trailing-comma = "false"
