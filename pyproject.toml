@@ -5,7 +5,7 @@ description = "Load data from the Open Movie Database and build fixture"
 authors = ["Etchegoyen Matthieu <etchegom@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"
