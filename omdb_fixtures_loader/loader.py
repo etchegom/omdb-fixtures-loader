@@ -15,11 +15,21 @@ SOURCE_OPTION = "source"
 DATE_FMT_OPTION = "date_fmt"
 
 
+def _format_rating_value(value: str) -> int:
+    if value.endswith("%"):
+        return int(value.replace("%", "").strip())
+    if value.endswith("/100"):
+        return int(value.replace("/100", "").strip())
+    if value.endswith("/10"):
+        return int(float(value.replace("/10", "").strip()) * 10)
+    return 0
+
+
 def _format_hit(hit: dict, options: dict = {}) -> dict:
     ret_hit = dict((k.lower(), v) for k, v in hit.items())
     del ret_hit["response"]
 
-    for field in ("actors", "genre", "writer"):
+    for field in ("actors", "genre", "writer", "language"):
         if field not in ret_hit:
             continue
         ret_hit[field] = [x.strip() for x in ret_hit[field].split(",")]
@@ -32,6 +42,23 @@ def _format_hit(hit: dict, options: dict = {}) -> dict:
             ret_hit[field] = date_value.strftime(options.get(DATE_FMT_OPTION, "%Y-%m-%d"))
         except ValueError:
             pass
+
+    ret_hit["boxoffice"] = str(ret_hit["boxoffice"]).replace("$", "").replace(",", "")
+    ret_hit["imdbvotes"] = str(ret_hit["imdbvotes"]).replace(",", "")
+    ret_hit["runtime"] = str(ret_hit["imdbvotes"]).replace("min", "").strip()
+
+    # rename movie type field to avoid problems with type keyword
+    ret_hit["movie_type"] = ret_hit.pop("type")
+
+    ratings = []
+    for rating in ret_hit.pop("ratings"):
+        ratings.append(
+            {
+                "source": rating.get("Source"),
+                "value": _format_rating_value(value=rating.get("Value")),
+            }
+        )
+    ret_hit["ratings"] = ratings
 
     if SOURCE_OPTION in options:
         source_fields = options.get(SOURCE_OPTION, list())
