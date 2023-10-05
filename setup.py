@@ -1,5 +1,6 @@
-from setuptools import setup, find_packages
 import os.path as op
+
+from setuptools import find_packages, setup
 
 
 def read(fname):

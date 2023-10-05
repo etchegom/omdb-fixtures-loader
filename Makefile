@@ -5,7 +5,7 @@ dev:
 	@poetry shell
 
 lint:
-	@flake8 omdb_fixtures_loader
+	@pflake8 omdb_fixtures_loader
 
 fmt:
 	@isort -rc omdb_fixtures_loader
