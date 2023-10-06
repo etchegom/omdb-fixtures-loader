@@ -1,4 +1,5 @@
 """OMDB data loader"""
+from __future__ import annotations
 
 from datetime import datetime
 
@@ -25,8 +26,8 @@ def _format_rating_value(value: str) -> int:
     return 0
 
 
-def _format_hit(hit: dict, options: dict = {}) -> dict:
-    ret_hit = dict((k.lower(), v) for k, v in hit.items())
+def _format_hit(hit: dict, options: dict) -> dict:
+    ret_hit = {k.lower(): v for k, v in hit.items()}
     del ret_hit["response"]
 
     for field in ("actors", "genre", "writer", "language"):
@@ -61,10 +62,10 @@ def _format_hit(hit: dict, options: dict = {}) -> dict:
     ret_hit["ratings"] = ratings
 
     if SOURCE_OPTION in options:
-        source_fields = options.get(SOURCE_OPTION, list())
-        return dict((k, v) for k, v in ret_hit.items() if k in source_fields)
+        source_fields = options.get(SOURCE_OPTION, [])
+        return {k: v for k, v in ret_hit.items() if k in source_fields}
 
-    return dict((k, v) for k, v in ret_hit.items())
+    return dict(ret_hit.items())
 
 
 def search_and_fetch(api_key: str, search: str, media_type: str = "movie", **options):
@@ -82,7 +83,7 @@ def search_and_fetch(api_key: str, search: str, media_type: str = "movie", **opt
 
     resp = requests.get(base_url, params={"apikey": api_key, "type": media_type, "s": search})
     if resp.status_code != 200:
-        raise LoaderError("URL {} returned code{}".format(resp.url, resp.status_code))
+        raise LoaderError(f"URL {resp.url} returned code{resp.status_code}")
 
     json_resp = resp.json()
     if "Search" not in json_resp:
